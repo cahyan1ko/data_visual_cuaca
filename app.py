@@ -55,7 +55,8 @@ if mode == 'card':
                 *{row.get('kab_kota', '')}*  
                 {row.get('kecamatan', '')} - {row.get('kelurahan', '')}  
                 Suhu: *{suhu}°C* {icon}  
-                Terakhir diperbarui: {row.get('timestamp', 'Tidak diketahui')}
+                Cuaca: {row.get('cuaca', 'Tidak tersedia')}  
+                Terakhir diperbarui: {convert_to_wib(row.get('timestamp'))}
             """)
             st.markdown("---")
 
@@ -78,8 +79,6 @@ elif mode == 'line':
                 height=300
             )
             st.altair_chart(line_chart, use_container_width=True)
-
-
 
 elif mode == 'pie':
     if df.empty:
