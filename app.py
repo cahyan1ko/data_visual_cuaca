@@ -20,7 +20,7 @@ for item in cuaca_data_raw:
         item['suhu'] = 0
 
 # --- Streamlit UI ---
-st.title("Detail Prediksi Cuaca Per Hari ini")
+st.title("Visualisasi Cuaca")
 
 # Input filter search daerah
 search_daerah = st.text_input("Masukkan daerah (kota/kab/kec/kel):").lower()
