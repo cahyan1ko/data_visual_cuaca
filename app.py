@@ -4,12 +4,35 @@ import pandas as pd
 import altair as alt
 import json
 
+from dateutil import parser
+
 # Koneksi MongoDB
 client = MongoClient('mongodb+srv://user:OG2QqFuCYwkoWBek@capstone.fqvkpyn.mongodb.net/?retryWrites=true&w=majority')
 dbcuaca = client['cuaca_db']
 
 # Ambil semua data dari MongoDB
 cuaca_data_raw = list(dbcuaca['prakiraan_cuaca'].find())
+
+def convert_to_wib(utc_input):
+    try:
+        if not utc_input:
+            return "Tidak tersedia"
+
+        if isinstance(utc_input, str):
+            dt_utc = parser.parse(utc_input)
+        elif isinstance(utc_input, datetime):
+            dt_utc = utc_input
+        else:
+            return "Format tidak dikenali"
+
+        if dt_utc.tzinfo is None:
+            dt_utc = dt_utc.replace(tzinfo=pytz.utc)
+
+        wib = pytz.timezone('Asia/Jakarta')
+        dt_wib = dt_utc.astimezone(wib)
+        return dt_wib.strftime("%d %b %Y %H:%M WIB")
+    except Exception as e:
+        return f"Format tidak dikenali"
 
 # Parsing suhu + handle error
 for item in cuaca_data_raw:
